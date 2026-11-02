@@ -35,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
 
     add_fieldsets = (
         (
-            "Личная информация",
+            None,
             {
                 "classes": ("wide",),
                 "fields": (
