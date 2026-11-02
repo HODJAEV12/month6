@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Личная информация", {"fields": ("username", "phone", "avatar")}),
+        ("Личная информация", {"fields": ("username", "phone", "avatar", "bio", "birth_date")}),
         (
             "Права доступа",
             {
@@ -35,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
 
     add_fieldsets = (
         (
-            "Личная информация",
+            None,
             {
                 "classes": ("wide",),
                 "fields": (
