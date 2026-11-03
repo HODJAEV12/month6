@@ -17,16 +17,14 @@ class CustomUserAdmin(UserAdmin):
             "Права доступа",
             {
                 "fields": (
-                    "role",
                     "is_active",
                     "is_staff",
                     "is_superuser",
                     "groups",
                     "user_permissions",
-                    "bio",
-                    "birth_date",
-                    "role"
                     "is_verified"
+                    "bio",
+                    "role",
                 )
             },
         ),
@@ -52,4 +50,3 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-
