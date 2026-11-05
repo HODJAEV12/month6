@@ -13,6 +13,9 @@ class IsAdminOnly(BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
         
+        elif request.user.role not in [CustomUser.Role.ADMIN]:
+            return False
+        
         return request.user.role == CustomUser.Role.ADMIN
 
 class IsUserOnly(BasePermission):
