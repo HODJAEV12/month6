@@ -25,8 +25,4 @@ class UserDashboardAPIView(APIView):
     permission_classes = [IsUserOnly]
 
     def get(self, request):
-        # Проверка роли пользователя перед возвратом данных(дополнение от себя)
-        if request.user.role != 'user':
-            return Response({"message": "Доступ запрещен. Только пользователи могут видеть это."})
-
         return Response({"message": "Личный кабинет пользователя"})
