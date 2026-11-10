@@ -3,6 +3,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 from core.settings.jazzmin import JAZZMIN_SETTINGS
+from datetime import timedelta
 
 load_dotenv()
 
@@ -40,6 +41,7 @@ LIBRARY_APPS = [
     'django_ckeditor_5',
     'modeltranslation',
     "corsheaders",
+    'rest_framework_simplejwt'
 ]
 
 INSTALLED_APPS = [
@@ -182,3 +184,11 @@ CKEDITOR_5_CONFIGS = {
 }
 
 AUTH_USER_MODEL = "testapp.CustomUser"
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True, 
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+}

@@ -23,7 +23,6 @@ class CustomUserAdmin(UserAdmin):
                     "groups",
                     "user_permissions",
                     "is_verified",
-                    "bio",
                     "role",
                 )
             },
