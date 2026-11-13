@@ -1,7 +1,7 @@
 from django.urls import path
 from apps.testapp.views import (
     AdminPanelAPIView, CustomTokenObtainPairView, 
-    LogoutView, PublicDataView, 
+    GoogleAuthView, LogoutView, PublicDataView, 
     SecretModeratorView, UserDashboardAPIView, profile_stats
 )
 
@@ -10,7 +10,8 @@ urlpatterns = [
     path('secret/', SecretModeratorView.as_view(), name='secret-data'),
     path('admin-panel/', AdminPanelAPIView.as_view(), name='admin-panel'),
     path('user-dashboard/', UserDashboardAPIView.as_view(), name='user-dashboard'),
-    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/logout/', LogoutView.as_view(), name='logout'),
-    path('api/profile/stats/', profile_stats, name='profile_stats'),
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('profile/stats/', profile_stats, name='profile_stats'),
+    path("auth/google/", GoogleAuthView.as_view(), name="google-auth"),
 ]
