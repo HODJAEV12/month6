@@ -1,7 +1,7 @@
 from django.urls import path
 from apps.testapp.views import (
     AdminPanelAPIView, CustomTokenObtainPairView, 
-    GoogleAuthView, LogoutView, PublicDataView, 
+    GoogleAuthView, LogoutView, PostListCreateView, PublicDataView, 
     SecretModeratorView, UserDashboardAPIView, profile_stats
 )
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/stats/', profile_stats, name='profile_stats'),
     path("auth/google/", GoogleAuthView.as_view(), name="google-auth"),
+    path("api/v1/posts/", PostListCreateView.as_view(), name="posts-list-create"),
 ]

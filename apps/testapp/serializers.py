@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Post
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -15,3 +16,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class GoogleAuthSerializer(serializers.Serializer):
     code = serializers.CharField(required=True)
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'content', 'created_at', 'updated_at']

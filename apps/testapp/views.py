@@ -11,7 +11,9 @@ from .serializers import GoogleAuthSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
 from .services import get_google_access_token, get_google_user_info
-
+from .models import Post
+from .serializers import PostSerializer
+from django.core.cache import cache
 
 class PublicDataView(APIView):
     permission_classes = [IsAuthenticated]
@@ -119,3 +121,28 @@ class GoogleAuthView(APIView):
                 "access": str(refresh.access_token),
             }
         }, status=status.HTTP_200_OK)
+
+
+POSTS_CACHE_KEY = "posts_list"
+POSTS_CACHE_TTL = 6
+
+class PostListCreateView(APIView):
+    def get(self, request):
+        cached_data = cache.get(POSTS_CACHE_KEY)
+        if cached_data is not None:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
+        queryset = Post.objects.all()
+        serializer = PostSerializer(queryset, many=True)
+        cache.set(POSTS_CACHE_KEY, serializer.data, timeout=POSTS_CACHE_TTL)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        cache.delete(POSTS_CACHE_KEY)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
