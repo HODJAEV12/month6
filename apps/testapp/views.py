@@ -14,6 +14,7 @@ from .services import get_google_access_token, get_google_user_info
 from .models import Post
 from .serializers import PostSerializer
 from django.core.cache import cache
+from .tasks import send_welcome_email_task
 
 class PublicDataView(APIView):
     permission_classes = [IsAuthenticated]
@@ -146,3 +147,21 @@ class PostListCreateView(APIView):
         cache.delete(POSTS_CACHE_KEY)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+User = get_user_model()
+
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        send_welcome_email_task.delay(user.email, getattr(user, "username", ""))
+
+        return Response(
+            {"id": user.id, "email": user.email, "message": "Пользователь зарегистрирован"},
+            status=status.HTTP_201_CREATED,
+        )

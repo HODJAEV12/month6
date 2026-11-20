@@ -204,3 +204,23 @@ CACHES = {
         "KEY_PREFIX": "django_hw",
     }
 }
+
+from celery.schedules import crontab
+
+TIME_ZONE = "Asia/Bishkek"
+USE_TZ = True
+
+CELERY_TIMEZONE = "Asia/Bishkek"
+CELERY_ENABLE_UTC = False
+
+CELERY_BEAT_SCHEDULE = {
+    'run-stats-every-5-minutes': {
+        'task': 'apps.testapp.tasks.monthly_user_stats_task',
+        'schedule': 300.0,
+    },
+    
+    'run-daily-midnight-task': {
+        'task': 'apps.testapp.tasks.monthly_user_stats_task',
+        'schedule': crontab(hour=0, minute=0),
+    },
+}
