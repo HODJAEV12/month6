@@ -1,17 +1,26 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: django_backend
+    build: .
+    command: ./start.sh
+    expose:
+      - "8000"
+    volumes:
+      - back_static:/app/staticfiles
+      - back_media:/app/media
     env_file:
       - .env
+
+  nginx:
+    image: nginx:alpine
     ports:
-      - "8000:8000"
+      - "80:80"
     volumes:
-      - static_volume:/app/staticfiles
-      - media_volume:/app/media
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - back_static:/var/html/static:ro
+      - back_media:/var/html/media:ro
+    depends_on:
+      - backend
 
 volumes:
-  static_volume:
-  media_volume:
+  back_static:
+  back_media:
