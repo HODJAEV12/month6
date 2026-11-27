@@ -7,13 +7,17 @@ from datetime import timedelta
 
 load_dotenv()
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-me")
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-SECRET_KEY = os.environ.get('SECRET_KEY')
 
 IS_PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 
@@ -45,7 +49,8 @@ LIBRARY_APPS = [
     'django_ckeditor_5',
     'modeltranslation',
     "corsheaders",
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 INSTALLED_APPS = [
@@ -127,14 +132,6 @@ MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 MODELTRANSLATION_CUSTOM_FIELDS = ('CKEditor5Field',)
 
 
-MEDIA_URL = '/back_media/'
-MEDIA_ROOT = BASE_DIR / 'back_media/'
-
-
-STATIC_URL = '/back_static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'back_static')
-
-
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -195,6 +192,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True, 
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
+    'TOKEN_OBTAIN_SERIALIZER': 'users.serializers.CustomTokenObtainPairSerializer',
 }
 
 CACHES = {
@@ -205,10 +203,10 @@ CACHES = {
     }
 }
 
-from celery.schedules import crontab
-
 TIME_ZONE = "Asia/Bishkek"
 USE_TZ = True
+
+from celery.schedules import crontab
 
 CELERY_TIMEZONE = "Asia/Bishkek"
 CELERY_ENABLE_UTC = False
@@ -224,14 +222,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(hour=0, minute=0),
     },
 }
-
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-me")
-DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
